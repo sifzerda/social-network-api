@@ -2,6 +2,7 @@ const { Thought, User } = require('../models');
 const { ObjectId } = require('mongoose').Types;
 
 module.exports = {
+  
   // Get all thoughts  =============================================== //
   async getThoughts(req, res) {
     try {

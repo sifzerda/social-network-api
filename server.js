@@ -50,7 +50,7 @@ app.get('/thought', (req, res) => {
     });
 });
 
-// TODO: Add Delete route that uses a filter to delete a single document by id
+// Delete route that uses a filter to delete a single document by id
 app.delete('/unthink', (req, res) => {
   // The title and author will be provided by the request body
   db.collection('thoughtCollection').deleteOne(

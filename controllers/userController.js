@@ -25,7 +25,7 @@ const grade = async (userId) =>
   ]);
 
 module.exports = {
-  // Get all users ============================================== //
+  // GET all users ============================================== //
   async getUsers(req, res) {
     try {
       const users = await User.find();
@@ -41,11 +41,12 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-  // Get a single user ============================================== //
+
+  // GET a single user ============================================== //
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId })
-        .select('-__v');
+      .populate('friends', 'reactions');
 
       if (!user) {
         return res.status(404).json({ message: 'No user with that ID' })
@@ -60,7 +61,8 @@ module.exports = {
       return res.status(500).json(err);
     }
   },
-  // create a new user ============================================ //
+
+  // POST a new user ============================================ //
   async createUser(req, res) {
     try {
       const user = await User.create(req.body);
@@ -69,7 +71,8 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Delete a user and remove their thought/s ================= //
+
+  // DELETE a user and remove their thought/s ================= //
   async deleteUser(req, res) {
     try {
       const user = await User.findOneAndRemove({ _id: req.params.userId });
@@ -97,7 +100,7 @@ module.exports = {
     }
   },
 
-  // Add a reaction to a user =============================== //
+  // PUT (Update) user by id [NEED TO FIX] =============================== //
   async addReaction(req, res) {
     console.log('You are adding a reaction');
     console.log(req.body);
@@ -120,7 +123,28 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-  // Remove reaction from a user ================================ //
+  // DELETE (Remove) user by id [NEED TO FIX] =============================== //
+  async removeReaction(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { reaction: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true }
+      );
+
+      if (!user) {
+        return res
+          .status(404)
+          .json({ message: 'No user found with that ID' });
+      }
+
+      res.json(user);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+
+  // DELETE (Remove) user's associated thoughts when deleted [NEED TO FIX] =============================== //
   async removeReaction(req, res) {
     try {
       const user = await User.findOneAndUpdate(
