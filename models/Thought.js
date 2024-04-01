@@ -18,19 +18,9 @@ const thoughtSchema = new Schema(
             type: String,
             required: true,
         },
-        reactions: [{
-            content: String,
-            ref: 'Reaction',
-            author: {
-                type: Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            createdAt: {
-                type: Date,
-                default: Date.now
-            },
-        }],
+        reactions: [ reactionSchema ]
     },
+
     {
         toJSON: { virtuals: true, },
         id: false,
@@ -51,7 +41,7 @@ const Thought = model('thought', thoughtSchema);
 
 module.exports = Thought;
 
-
+//================================================================== //
 
 /// alternate way of formatting timestamp
 
