@@ -1,28 +1,5 @@
-const { ObjectId } = require('mongoose').Types;
+//const { ObjectId } = require('mongoose').Types;
 const { User, Thought } = require('../models');
-
-// Aggregate function to get the number of students overall //
-const headCount = async () => {
-  const numberOfUsers = await User.aggregate()
-    .count('userCount');
-  return numberOfUsers;
-}
-
-// Aggregate function for getting the overall grade using $avg //
-const grade = async (userId) =>
-  User.aggregate([
-    // only include the given student by using $match //
-    { $match: { _id: new ObjectId(userId) } },
-    {
-      $unwind: '$assignments',
-    },
-    {
-      $group: {
-        _id: new ObjectId(userId),
-        overallGrade: { $avg: '$assignments.score' },
-      },
-    },
-  ]);
 
 module.exports = {
   // GET all users ============================================== //
@@ -42,11 +19,12 @@ module.exports = {
     }
   },
 
-  // GET a single user ============================================== //
+  // GET a single user ============================================== // //  <-- DONE
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId })
-      .populate('friends', 'reactions');
+        .select("-__v")
+        .populate('friends', 'reactions');
 
       if (!user) {
         return res.status(404).json({ message: 'No user with that ID' })
@@ -62,7 +40,7 @@ module.exports = {
     }
   },
 
-  // POST a new user ============================================ //
+  // POST a new user ============================================ // //  <-- DONE
   async createUser(req, res) {
     try {
       const user = await User.create(req.body);
@@ -75,7 +53,7 @@ module.exports = {
   // DELETE a user and remove their thought/s ================= //
   async deleteUser(req, res) {
     try {
-      const user = await User.findOneAndRemove({ _id: req.params.userId });
+      const user = await User.findOneAndDelete({ _id: req.params.userId });
 
       if (!user) {
         return res.status(404).json({ message: 'No such user exists' });

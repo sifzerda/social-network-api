@@ -19,19 +19,25 @@ const userSchema = new Schema(
         thoughts: [{
             type: Schema.Types.ObjectId,
             ref: 'Thought',
-            author: {
-                type: Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            createdAt: {
-                type: Date,
-                default: Date.now
-            },
-            friends: {
-                type: Schema.Types.ObjectId,
-                ref: 'User'
-            },
+            //author: {
+            //    type: Schema.Types.ObjectId,
+            //    ref: 'User'
+            //},
+            //createdAt: {
+            //    type: Date,
+            //    default: Date.now
+            //},
+            //friends: {
+            //    type: Schema.Types.ObjectId,
+            //    ref: 'User'
+            //},
         }],
+        friends: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+            }
+        ]
     },
     {
         toJSON: { virtuals: true, },
@@ -43,7 +49,7 @@ userSchema.virtual('friendCount').get(function () {
     return this.friends.length;
 });
 
-const User = model('course', userSchema);
+const User = model('user', userSchema);
 
 module.exports = User;
 
