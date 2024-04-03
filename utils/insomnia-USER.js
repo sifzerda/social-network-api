@@ -1,16 +1,22 @@
 //     POST            localhost:3001/api/users       -- works
 
-//     GET            localhost:3001/api/users
+//     GET            localhost:3001/api/users        -- works
 
-//     GET id            localhost:3001/api/users/1
+//                 !! id not being recognized !!
 
-//     DELETE id            localhost:3001/api/users/1
+//     GET id            localhost:3001/api/users/             ids
+//                                                  660d6794027bdbc11533f781
+//                                                  660d6bd2027bdbc11533f783
+//                                                  660d6bd7027bdbc11533f785
+//                                                  660d6c27027bdbc11533f789
+//                                                  660d6c37027bdbc11533f78b
+// 
 
-//     PUT id            localhost:3001/api/users/1
+//     DELETE id         localhost:3001/api/users/1     -- 
+
+//     PUT id            localhost:3001/api/users/1     -- 
 
 
-
-// localhost:3001/api/users/      ---  Error 500 getting all users MissingSchemaError: Schema hasn't been registered for model "User".
 
 
 

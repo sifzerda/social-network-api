@@ -1,51 +1,5 @@
 ## INSTRUCTIONS
 
-- Collections (Models):
-
-1. User:
-{
-
-    - thoughts:
-        > array of _id values referencing the Thought model
-        > array of _id values referencing the User model (self-reference)
-
-    Schema settings: create a virtual calld friendCount that retrieves the length of the user's friends array field on query.
-}
-1. Thought:
-{
-
-    - createdAt: 
-        > date 
-        > Set default value to the current timestamp
-        > Use a getter method to format the timestamp on query
-        > must match a valid email address (via Mongoose's matching validation system)
-
-    - reactions: (These are like replies)
-        > Array of nested documents created with the reactionSchema
-
-    Schema Settings: Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query.
-}
-
-Reaction (SCHEMA ONLY)
-•	reactionId
-o	    Use Mongoose's ObjectId data type
-o	    Default value is set to a new ObjectId
-•	reactionBody
-o	    String
-o	    Required
-o	    280 character maximum
-•	username
-o	    String
-o	    Required
-•	createdAt
-o	    Date
-o	    Set default value to the current timestamp
-o	    Use a getter method to format the timestamp on query
-
-Schema Settings
-This will not be a model, but rather will be used as the reaction field's subdocument schema in the Thought model.
-
-
 API ROUTES:
 
                 /api/users

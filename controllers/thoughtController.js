@@ -50,10 +50,7 @@ const thoughtController = {
       // ** push created thought id to user's thought array field **
       user.thoughts.push(thought._id);
 
-      // Save the updated user
-      await user.save();
-
-      res.status(200).json({ message: '200: Thought created successfully', thought: savedThought });
+      res.status(200).json({ message: '200: Thought created successfully', thought });
       //res.json(thought);
     } catch (err) {
       console.log(err);
