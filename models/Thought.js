@@ -1,7 +1,11 @@
 const { Schema, model, Types } = require('mongoose');
 const thoughtSchema = require('./Thought');
+const dayjs = require('dayjs');
 
 // Schema to create Reaction Model ================================================= //
+// * doesn't have own model
+// * embedded inside thoughtSchema
+
 const reactionSchema = new Schema(
     {
         reactionId: {
@@ -19,7 +23,8 @@ const reactionSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now
+            default: Date.now,
+            get: formatDate
         },
     },
     {
@@ -38,13 +43,14 @@ const thoughtSchema = new Schema(
         },
         createdAt: {
             type: Date,
-            default: Date.now
+            default: Date.now,
+            get: formatDate
         },
         username: {
             type: String,
             required: true,
         },
-        reactions: [ reactionSchema ]
+        reactions: [reactionSchema]
     },
 
     {
@@ -52,17 +58,10 @@ const thoughtSchema = new Schema(
         id: false,
     });
 
-// Define a getter method for the createdAt field to format the date
-thoughtSchema.path('createdAt').get(function (value) {
-    // Format the date as you desire, for example:
-    return value.toLocaleString('en-US', { timeZone: 'UTC' });
-});
-
-// Use a getter method for the createdAt field to format the date
-reactionSchema.path('createdAt').get(function (value) {
-    // Format the date as you desire, for example:
-    return value.toLocaleString('en-US', { timeZone: 'UTC' });
-});
+// Defines a getter method to format the date using dayjs
+function formatDate(date) {
+    return dayjs(date).format('ddd, MMM D, YYYY h:mm A');
+};
 
 // creates virtual:
 thoughtSchema.virtual('reactionCount').get(function () {
@@ -75,8 +74,24 @@ module.exports = Thought;
 
 //================================================================== //
 
-/// alternate way of formatting timestamp
+/// alternate way/s of formatting timestamp:
 
 // thoughtSchema.virtual('formattedCreatedAt').get(function() {
 //    return this.createdAt.toISOString(); // timestamp format here
 //});
+
+// Define a getter method for the createdAt field to format the date
+//thoughtSchema.path('createdAt').get(function (value) {
+    // Formats:
+//   return value.toLocaleString('en-US', { timeZone: 'UTC' });
+//});
+
+// Use a getter method for the createdAt field to format the date
+//reactionSchema.path('createdAt').get(function (value) {
+    // Format the date as you desire, for example:
+//    return value.toLocaleString('en-US', { //timeZone: 'UTC' });
+//});
+
+
+
+
