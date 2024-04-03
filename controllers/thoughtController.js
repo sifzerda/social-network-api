@@ -41,9 +41,6 @@ const thoughtController = {
     try {
       const thought = await Thought.create(req.body);
 
-      // save thought to db
-      const savedThought = await thought.save();
-
       const userID = req.body.userId;
       const user = await User.findById(userID);
       // if user id not found, return error:
@@ -51,7 +48,7 @@ const thoughtController = {
         return res.status(404).json({ error: 'Error 404: finding user by id or user does not exist' });
       }
       // ** push created thought id to user's thought array field **
-      user.thoughts.push(savedThought._id);
+      user.thoughts.push(thought._id);
 
       // Save the updated user
       await user.save();
@@ -73,9 +70,7 @@ const thoughtController = {
         res.status(404).json({ message: 'Error 404: No thought found with that ID' });
       };
 
-      //await ObjectId.deleteMany({ _id: { $in: thought.reactions } });
       res.status(200).json({ message: '200: Thought and its Reactions was successfully deleted'});
-    // //
     } catch (err) {
       console.log('Error 500 deleting a thought');
       res.status(500).json(err);
@@ -83,24 +78,24 @@ const thoughtController = {
   },
 
   // Update a thought =============================================== // <-- DONE
-  async updateThought(req, res) {
-    try {
-      const thought = await Thought.findOneAndUpdate(
-        { _id: req.params.thoughtId },
-        { $set: req.body },
-        { runValidators: true, new: true }
-      );
+async updateThought(req, res) {
+  try {
+    const thought = await Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $set: req.body },
+      { runValidators: true, new: true }
+    );
 
-      if (!thought) {
-        res.status(404).json({ message: 'Error 404: No thought with this id!' });
-      }
-
-      res.json(thought);
-    } catch (err) {
-      console.log('Error 500 updating thought');
-      res.status(500).json(err);
+    if (!thought) {
+      return res.status(404).json({ message: 'Error 404: No thought with this ID' });
     }
-  },
+
+    res.json(thought);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error updating thought', err});
+  }
+},
 
   // ========================== REACTIONS ============================= //
 
@@ -114,7 +109,7 @@ const thoughtController = {
 
       const updatedThought = await Thought.findOneAndUpdate(
         { _id: thoughtId },
-        { $push: reactionId },
+        { $push: { reactions: reactionId } },
         { new: true, runValidators: true } // Return updated document:
       );
   
@@ -122,7 +117,6 @@ const thoughtController = {
         return res.status(404).json({ error: 'Error 404: Thought with this id not found' });
       }
   
-      res.json(updatedThought);
       res.status(200).json({ message: '200: Reaction was successfully created'});
     } catch (err) {
       console.error(err);
@@ -130,24 +124,24 @@ const thoughtController = {
     }
   },
 
-  // Delete a reaction  =============================================== //
+  // Delete a reaction by updating the thought //
 
-  async createReaction(req, res) {
+  async deleteReaction(req, res) {
     try {
       const thoughtId = req.params.thoughtId;
       const reactionId  = req.params.reactionId;
-      // Finds the thought by ID and update it to add the reaction:
 
+      // Finds the thought by ID and update it to add the reaction:
       const updatedThought = await Thought.findOneAndUpdate(
         { _id: thoughtId },
-        { $pull: reactionId },
+        { $pull: { reactions: reactionId } },
+        { new: true, runValidators: true }
       );
   
       if (!updatedThought) {
         return res.status(404).json({ error: 'Error 404: Thought with this id not found' });
       }
   
-      res.json(updatedThought);
       res.status(200).json({ message: '200: Reaction was successfully deleted'});
     } catch (err) {
       console.error(err);

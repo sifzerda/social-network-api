@@ -1,32 +1,30 @@
 //const { ObjectId } = require('mongoose').Types;
-const { User, Thought } = require('../models');
+const { User } = require('../models');
 
 const userController = {
 
-// =================================================================================//
-//                                  API ROUTES                                      //
-// ================================================================================ //
+  // =================================================================================//
+  //                                  API ROUTES                                      //
+  // ================================================================================ //
 
   // GET all users ============================================== //
-  
+
   async getUsers(req, res) {
     try {
-      const users = await User.find();
+      const users = await User.find()
+        // .select("-__v") excludes the __v field from result
+        .select("-__v")
+        .populate('friends', 'reactions');
 
-      const studentObj = {
-        users,
-        headCount: await headCount(),
-      };
-
-      res.json(studentObj);
+      res.json(users);
     } catch (err) {
-      console.log(err);
-      return res.status(500).json(err);
+      console.log('Error 500 getting all users', err);
+      return res.status(500).json({ message: 'Error getting all users' });
     }
   },
 
-  // GET a single user ============================================== // //  <-- DONE
-  
+  // GET a single user ============================================== // 
+
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId })
@@ -36,126 +34,120 @@ const userController = {
       if (!user) {
         return res.status(404).json({ message: 'No user with that ID' })
       }
-
-      res.json({
-        user,
-        //grade: await grade(req.params.studentId),
-      });
+      console.log('200 successfully found user by id');
+      res.json(user);
     } catch (err) {
-      console.log(err);
+      console.log('Error 500 getting a single user', err);
       return res.status(500).json(err);
     }
   },
 
-  // POST a new user ============================================ // //  <-- DONE
-  
+  // POST a new user ============================================ //
+
   async createUser(req, res) {
     try {
       const user = await User.create(req.body);
       res.json(user);
     } catch (err) {
+      console.log('Error 500 creating a new user');
       res.status(500).json(err);
     }
   },
 
-  // DELETE a user and remove their thought/s ================= //
- 
+  // DELETE a user by id and remove their thought/s ================= //
+
   async deleteUser(req, res) {
     try {
-      const user = await User.findOneAndDelete({ _id: req.params.userId });
-
-      if (!user) {
-        return res.status(404).json({ message: 'No such user exists' });
-      }
-
-      const thought = await Thought.findOneAndUpdate(
-        { users: req.params.userId },
-        { $pull: { users: req.params.userId } },
+      const user = await User.findOneAndDelete(
+        { _id: req.params.userId },
+        { $pull: { thoughts: { thoughtId: req.params.thoughtId } } },
         { new: true }
       );
 
-      if (!thought) {
-        return res.status(404).json({
-          message: 'User deleted, but no Thoughts found',
-        });
-      }
-
-      res.json({ message: 'User successfully deleted' });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json(err);
-    }
-  },
-
-  // PUT (Update) user by id [NEED TO FIX] =============================== //
-  
-  async addReaction(req, res) {
-    console.log('You are adding a reaction');
-    console.log(req.body);
-
-    try {
-      const user = await User.findOneAndUpdate(
-        { _id: req.params.userId },
-        { $addToSet: { reactions: req.body } },
-        { runValidators: true, new: true }
-      );
-
       if (!user) {
-        return res
-          .status(404)
-          .json({ message: 'No user found with that ID' });
+        return res.status(404).json({ message: 'No user found with that ID' });
       }
 
       res.json(user);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ message: `Error 500 removing user's thoughts`, err });
     }
   },
 
-  // DELETE (Remove) user by id [NEED TO FIX] =============================== //
-  
-  async removeReaction(req, res) {
+  // PUT (Update) find user by id, update thought thoughtText  ============================================ //
+
+  async updateUser(req, res) {
     try {
       const user = await User.findOneAndUpdate(
-        { _id: req.params.userId },
-        { $pull: { reaction: { reactionId: req.params.reactionId } } },
-        { runValidators: true, new: true }
+        { _id: req.params.userId, 'thoughts.thoughtId': req.params.thoughtId },
+        { $set: { 'thoughts.$.thoughtText': req.body.thoughtText } },
+        { new: true }
       );
 
       if (!user) {
-        return res
-          .status(404)
-          .json({ message: 'No user found with that ID' });
+        return res.status(404).json({ message: 'No user found with that ID' });
       }
 
       res.json(user);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ message: 'Error 500 updating user with reaction', err });
     }
   },
 
-  // DELETE (Remove) user's associated thoughts when deleted [NEED TO FIX] =============================== //
-  
-  async removeReaction(req, res) {
-    try {
-      const user = await User.findOneAndUpdate(
-        { _id: req.params.userId },
-        { $pull: { reaction: { reactionId: req.params.reactionId } } },
-        { runValidators: true, new: true }
-      );
+// POST / add a user's friend ============================================ //
 
-      if (!user) {
-        return res
-          .status(404)
-          .json({ message: 'No user found with that ID' });
-      }
+async createFriend(req, res) {
+  try {
+    const { friendId } = req.params;
+    const user = await User.findByIdAndUpdate(req.params.id,
+      { $push: { friends: friendId }}, // Add friend to user's friends list
+      { new: true }
+    );
 
-      res.json(user);
-    } catch (err) {
-      res.status(500).json(err);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
-  },
-};
+
+    // Check if friend is already in user's friends list
+    if (user.friends.includes(friendId)) {
+      return res.status(400).json({ error: `Friend already exists in this user's friends list` });
+    }
+
+    res.status(200).json(befriendedUser);
+  } catch (error) {
+    console.error('Error creating friend:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+},
+
+// DELETE a user's friend ================= //
+
+async deleteFriend(req, res) {
+  try {
+    const { friendId } = req.params;
+    const user = await User.findByIdAndUpdate(
+      { _id: req.params.id },
+      { $pull: { friends: friendId } },
+      { new: true }
+    )
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if friend is in user's friends list
+    if (!user.friends.includes(friendId)) {
+      return res.status(400).json({ error: 'Friend does not exist in the user\'s friends list' });
+    }
+
+    // Respond with the updated user
+    res.status(200).json(unfriendedUser);
+  } catch (error) {
+    console.error('Error deleting friend:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+}
 
 // Exports the controller module
 module.exports = userController;
