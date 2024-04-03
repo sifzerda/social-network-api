@@ -1,7 +1,11 @@
 const { Thought, User } = require('../models');
 //const { ObjectId } = require('mongoose').Types;
 
-module.exports = {
+const thoughtController = {
+
+// =================================================================================//
+//                                  API ROUTES                                      //
+// ================================================================================ //
 
   // Get all thoughts  =============================================== //
   async getThoughts(req, res) {
@@ -77,13 +81,6 @@ module.exports = {
       res.status(500).json(err);
     }
   },
-};
-
-
-
-
-
-
 
 // CREATE REACTION ================== //
 
@@ -98,11 +95,10 @@ module.exports = {
       console.log(err);
       return res.status(500).json(err);
     }
-  };
-
-
+  },
 
 // DELETE REACTION ================== //
+
   // Delete a thought  =============================================== //
   async deleteReaction(req, res) {
     try {
@@ -117,4 +113,14 @@ module.exports = {
     } catch (err) {
       res.status(500).json(err);
     }
-  },
+  }
+};
+
+// Exports the controller module
+module.exports = thoughtController;
+
+
+
+
+  
+
