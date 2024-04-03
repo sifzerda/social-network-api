@@ -1,44 +1,32 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 // Schema to create a User model
-const userSchema = new Schema(
-    {
-        username: {
-            type: String,
-            required: true,
-            unique: true,
-            trim: true,
-        },
-        email: {
-            type: String,
-            default: true,
-            required: true,
-            unique: true,
-            match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Please enter a valid email address']
-        },
-        thoughts: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Thought',
-            //author: {
-            //    type: Schema.Types.ObjectId,
-            //    ref: 'User'
-            //},
-            //createdAt: {
-            //    type: Date,
-            //    default: Date.now
-            //},
-            //friends: {
-            //    type: Schema.Types.ObjectId,
-            //    ref: 'User'
-            //},
-        }],
-        friends: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
-            }
-        ]
+const userSchema = new Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
     },
+    email: {
+        type: String,
+        default: true,
+        required: true,
+        unique: true,
+        match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Please enter a valid email address']
+    },
+    thoughts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Thought',
+    }],
+    friends: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ]
+},
     {
         toJSON: { virtuals: true, },
         id: false,
@@ -49,7 +37,7 @@ userSchema.virtual('friendCount').get(function () {
     return this.friends.length;
 });
 
-const User = model('user', userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
 

@@ -1,6 +1,11 @@
 const { Schema, model, Types } = require('mongoose');
 const dayjs = require('dayjs');
 
+// Defines a getter method to format the date using dayjs
+function formatDate(date) {
+    return dayjs(date).format('ddd, MMM D, YYYY h:mm A');
+}
+
 // Schema to create Reaction Model ================================================= //
 // * doesn't have own model
 // * embedded inside thoughtSchema
@@ -56,11 +61,6 @@ const thoughtSchema = new Schema(
         toJSON: { virtuals: true, getters: true },
         id: false,
     });
-
-// Defines a getter method to format the date using dayjs
-function formatDate(date) {
-    return dayjs(date).format('ddd, MMM D, YYYY h:mm A');
-};
 
 // creates virtual:
 thoughtSchema.virtual('reactionCount').get(function () {
