@@ -1,13 +1,14 @@
 //const { ObjectId } = require('mongoose').Types;
 const { User, Thought } = require('../models');
 
-module.exports = {
+const userController = {
 
 // =================================================================================//
 //                                  API ROUTES                                      //
 // ================================================================================ //
 
   // GET all users ============================================== //
+  
   async getUsers(req, res) {
     try {
       const users = await User.find();
@@ -25,6 +26,7 @@ module.exports = {
   },
 
   // GET a single user ============================================== // //  <-- DONE
+  
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId })
@@ -46,6 +48,7 @@ module.exports = {
   },
 
   // POST a new user ============================================ // //  <-- DONE
+  
   async createUser(req, res) {
     try {
       const user = await User.create(req.body);
@@ -56,6 +59,7 @@ module.exports = {
   },
 
   // DELETE a user and remove their thought/s ================= //
+ 
   async deleteUser(req, res) {
     try {
       const user = await User.findOneAndDelete({ _id: req.params.userId });
@@ -84,6 +88,7 @@ module.exports = {
   },
 
   // PUT (Update) user by id [NEED TO FIX] =============================== //
+  
   async addReaction(req, res) {
     console.log('You are adding a reaction');
     console.log(req.body);
@@ -106,7 +111,9 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+
   // DELETE (Remove) user by id [NEED TO FIX] =============================== //
+  
   async removeReaction(req, res) {
     try {
       const user = await User.findOneAndUpdate(
@@ -128,6 +135,7 @@ module.exports = {
   },
 
   // DELETE (Remove) user's associated thoughts when deleted [NEED TO FIX] =============================== //
+  
   async removeReaction(req, res) {
     try {
       const user = await User.findOneAndUpdate(
@@ -148,3 +156,6 @@ module.exports = {
     }
   },
 };
+
+// Exports the controller module
+module.exports = userController;
