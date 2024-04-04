@@ -77,9 +77,9 @@ const userController = {
   async updateUser(req, res) {
     try {
       const user = await User.findOneAndUpdate(
-        { _id: req.params.userId, 'thoughts.thoughtId': req.params.thoughtId },
-        { $set: { 'thoughts.$.thoughtText': req.body.thoughtText } },
-        { new: true }
+        { _id: req.params.userId },
+        { $set: req.body },
+        { runValidators: true, new: true }
       );
 
       if (!user) {
