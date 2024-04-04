@@ -1,12 +1,7 @@
 
 // ALL THOUGHT ROUTES ARE WORKING 
 // USER ROUTES THAT ARE WORKING:
-// get all users;
-// get one user by id;
-// create user;
-// delete user;
 
-// ** only update not working
 
 {
     "username": "lernantino",

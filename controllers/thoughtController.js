@@ -100,24 +100,21 @@ async updateThought(req, res) {
 
   async createReaction(req, res) {
     try {
-      const thoughtId = req.params.thoughtId;
-      const reactionId  = req.params.reactionId;
       // Finds the thought by ID and update it to add the reaction:
 
-      const updatedThought = await Thought.findOneAndUpdate(
-        { _id: thoughtId },
-        { $push: { reactions: reactionId } },
+      const thought = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $addToSet: { reactions: req.body } },
         { new: true, runValidators: true } // Return updated document:
       );
   
-      if (!updatedThought) {
+      if (!thought) {
         return res.status(404).json({ error: 'Error 404: Thought with this id not found' });
       }
   
-      res.status(200).json({ message: '200: Reaction was successfully created'});
+      res.json(thought);
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Error 500 Server error' });
+      res.status(500).json(err);
     }
   },
 
@@ -132,7 +129,7 @@ async updateThought(req, res) {
       const updatedThought = await Thought.findOneAndUpdate(
         { _id: thoughtId },
         { $pull: { reactions: reactionId } },
-        { new: true, runValidators: true }
+        { new: true }
       );
   
       if (!updatedThought) {
