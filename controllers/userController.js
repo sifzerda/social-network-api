@@ -14,7 +14,7 @@ const userController = {
       const users = await User.find()
         // .select("-__v") excludes the __v field from result
         .select("-__v")
-        .populate('friends', 'reactions');
+        .populate('friends');
 
       res.json(users);
     } catch (err) {
@@ -23,31 +23,29 @@ const userController = {
     }
   },
 
-  // GET a single user ============================================== // 
+  // GET a single user by id ============================================== // 
 
   async getSingleUser(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId })
         .select("-__v")
-        .populate('friends', 'reactions');
-
+        .populate('friends');
+      // If user isn't found, return 404 error:
       if (!user) {
-        return res.status(404).json({ message: 'No user with that ID' })
+        return res.status(404).json({ message: 'No user with that ID' });
       }
-      console.log('200 successfully found user by id');
       res.json(user);
     } catch (err) {
-      console.log('Error 500 getting a single user', err);
-      return res.status(500).json(err);
+      res.status(500).json(err);
     }
   },
 
-  // POST a new user ============================================ //
+  // POST / create a new user ============================================ //
 
   async createUser(req, res) {
     try {
-      const user = await User.create(req.body);
-      res.json(user);
+      const dbUserData = await User.create(req.body);
+      res.json(dbUserData);
     } catch (err) {
       console.log('Error 500 creating a new user');
       res.status(500).json(err);
@@ -94,59 +92,59 @@ const userController = {
     }
   },
 
-// POST / add a user's friend ============================================ //
+  // POST / add a user's friend ============================================ //
 
-async createFriend(req, res) {
-  try {
-    const { friendId } = req.params;
-    const user = await User.findByIdAndUpdate(req.params.id,
-      { $push: { friends: friendId }}, // Add friend to user's friends list
-      { new: true }
-    );
+  async createFriend(req, res) {
+    try {
+      const { friendId } = req.params;
+      const user = await User.findByIdAndUpdate(req.params.id,
+        { $push: { friends: friendId } }, // Add friend to user's friends list
+        { new: true }
+      );
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      // Check if friend is already in user's friends list
+      if (user.friends.includes(friendId)) {
+        return res.status(400).json({ error: `Friend already exists in this user's friends list` });
+      }
+
+      res.status(200).json(befriendedUser);
+    } catch (error) {
+      console.error('Error creating friend:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
+  },
 
-    // Check if friend is already in user's friends list
-    if (user.friends.includes(friendId)) {
-      return res.status(400).json({ error: `Friend already exists in this user's friends list` });
+  // DELETE a user's friend ================= //
+
+  async deleteFriend(req, res) {
+    try {
+      const { friendId } = req.params;
+      const user = await User.findByIdAndUpdate(
+        { _id: req.params.id },
+        { $pull: { friends: friendId } },
+        { new: true }
+      )
+
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      // Check if friend is in user's friends list
+      if (!user.friends.includes(friendId)) {
+        return res.status(400).json({ error: 'Friend does not exist in the user\'s friends list' });
+      }
+
+      // Respond with the updated user
+      res.status(200).json(unfriendedUser);
+    } catch (error) {
+      console.error('Error deleting friend:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
-
-    res.status(200).json(befriendedUser);
-  } catch (error) {
-    console.error('Error creating friend:', error);
-    res.status(500).json({ error: 'Internal server error' });
   }
-},
-
-// DELETE a user's friend ================= //
-
-async deleteFriend(req, res) {
-  try {
-    const { friendId } = req.params;
-    const user = await User.findByIdAndUpdate(
-      { _id: req.params.id },
-      { $pull: { friends: friendId } },
-      { new: true }
-    )
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    // Check if friend is in user's friends list
-    if (!user.friends.includes(friendId)) {
-      return res.status(400).json({ error: 'Friend does not exist in the user\'s friends list' });
-    }
-
-    // Respond with the updated user
-    res.status(200).json(unfriendedUser);
-  } catch (error) {
-    console.error('Error deleting friend:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-}
 }
 
 // Exports the controller module

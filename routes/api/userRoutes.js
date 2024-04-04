@@ -12,9 +12,9 @@ const {
 // /api/users
 router.route('/').get(getUsers).post(createUser);
 
-// /api/users/users/:id
+// /api/users/:userId
 router
-  .route('/:id')
+  .route('/:userId')
   .get(getSingleUser)
   .put(updateUser)
   .delete(deleteUser);
