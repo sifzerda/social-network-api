@@ -122,27 +122,26 @@ async updateThought(req, res) {
 
   async deleteReaction(req, res) {
     try {
-      const thoughtId = req.params.thoughtId;
-      const reactionId  = req.params.reactionId;
+      //const thoughtId = req.params.thoughtId;
+      //const reactionId  = req.params.reactionId;
 
       // Finds the thought by ID and update it to add the reaction:
-      const updatedThought = await Thought.findOneAndUpdate(
-        { _id: thoughtId },
-        { $pull: { reactions: reactionId } },
+      const thought = await Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $pull: { reaction: { reactionId: req.params.reactionId } } },
         { new: true }
       );
   
-      if (!updatedThought) {
+      if (!thought) {
         return res.status(404).json({ error: 'Error 404: Thought with this id not found' });
       }
-  
-      res.status(200).json({ message: '200: Reaction was successfully deleted'});
+
+      res.json(thought);
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Error 500 Server error' });
+      res.status(500).json(err);
     }
   },
-}
+};
 
 // Exports the controller module
 module.exports = thoughtController;

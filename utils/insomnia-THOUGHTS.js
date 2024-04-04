@@ -1,6 +1,5 @@
 
 
-
 //     POST           http://localhost:3001/api/thoughts      -- works 
 
 //     GET           http://localhost:3001/api/thoughts       -- works
