@@ -10,6 +10,7 @@
     "seed": "node utils/seed"
   },
   "dependencies": {
+    "casual": "^1.6.2",
     "dayjs": "^1.11.10",
     "express": "^4.17.1",
     "i": "^0.3.7",

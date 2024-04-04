@@ -30,6 +30,7 @@ Link to video demo of app:
 CODE EDITOR TERMINAL:
 
 - npm install i
+- optional: npm seed (to populate with randomly generated data)
 - npm run watch OR npm run start
 
 API routes:
@@ -41,17 +42,17 @@ API routes:
 - GET all thoughts
 - POST a new thought
 
-<ins>localhost:3001/api/thoughts/:id</ins>
+<ins>localhost:3001/api/thoughts/:thoughtId</ins>
 
 - GET thought by id
 - DELETE thought by id
 - PUT thought by id
 
-<ins>localhost:3001/api/thoughts/:id/reactions</ins>
+<ins>localhost:3001/api/thoughts/:thoughtId/reactions</ins>
 
 - GET all reactions
 
-<ins>localhost:3001/api/thoughts/:id/reactions/:id</ins>
+<ins>localhost:3001/api/thoughts/:id/reactions/:reactionId</ins>
 
 - GET reaction by id
 
@@ -62,17 +63,17 @@ API routes:
 - GET all users
 - POST a new user
 
-<ins>localhost:3001/api/users/:id</ins>
+<ins>localhost:3001/api/users/:userId</ins>
 
 - GET one user by id
 - PUT user by id
 - DELETE user by id
 
-<ins>localhost:3001/api/users/:id/friends/:friendId</ins>
+<ins>localhost:3001/api/users/:userId/friends/:friendId</ins>
 
 ## 5. Usage
 
-This is MERN-based code for the back end of a social networking app. It runs on an express server with a MongoDB database containing models for users, thoughts and associated reactions. API routes enable CRUD functionality for users, posts ('thoughts') and comments ('reactions'). It's designed for a site where users can sign up and post 'thoughts', and leave 'reactions' to other users thoughts.
+This is MERN-based code for the back end of a social networking app. It runs on an express server with a MongoDB database containing models for users, thoughts and associated reactions. API routes enable CRUD functionality for users, posts ('thoughts') and comments ('reactions'). It's designed for a site where users can sign up and post 'thoughts', leave 'reactions' to other users thoughts, and add other users as 'friends'.
 
 ## 6. Support
 
@@ -96,6 +97,7 @@ The author acknowledges and credits those who have contributed to this project, 
 -	https://git.bootcampcontent.com/Monash-University/MONU-VIRT-FSF-PT-11-2023-U-LOLC
 -	Chee Ho Tai
 -	Pranita Shrestha
+- 
 
 ## 10. License
 
