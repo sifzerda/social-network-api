@@ -98,12 +98,12 @@ const userController = {
     try {
       const user = await User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $addToSet: { friends: req.params.friendId } },
+        { $addToSet: { friends: req.body } },
         { runValidators: true, new: true }
       );
 
       if (!user) {
-        return res.status(404).json({ error: 'User not found' });
+        return res.status(404).json({ error: 'No user with this id' });
       }
 
       res.json(user);
@@ -123,7 +123,7 @@ const userController = {
       );
 
       if (!user) {
-        return res.status(404).json({ error: 'User not found' });
+        return res.status(404).json({ error: 'No user with this id' });
       }
 
       res.json(user);

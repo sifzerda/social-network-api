@@ -1,15 +1,11 @@
 const express = require('express');
-//const //mongodb = require('mongodb').MongoClient;
-// We import the ObjectId class from mongodb
 const { MongoClient } = require('mongodb');
-const { Thought, User } = require('./models/index');
-
+const db = require('./config/connection');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 const connectionStringURI = `mongodb://127.0.0.1:27017`;
 const client = new MongoClient(connectionStringURI);
-let db;
 const dbName = 'socialnetworkDB';
 
 client.connect()

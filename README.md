@@ -54,7 +54,8 @@ API routes:
 
 <ins>localhost:3001/api/thoughts/:id/reactions/:reactionId</ins>
 
-- GET reaction by id
+- DELETE reaction by id
+- * this needs to be the reactionId not the _id
 
 #### (2) Users:
 

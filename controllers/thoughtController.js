@@ -105,11 +105,11 @@ async updateThought(req, res) {
       const thought = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $addToSet: { reactions: req.body } },
-        { new: true, runValidators: true } // Return updated document:
+        { runValidators: true, new: true } // Return updated document:
       );
   
       if (!thought) {
-        return res.status(404).json({ error: 'Error 404: Thought with this id not found' });
+        return res.status(404).json({ error: 'Error 404: No thought with this id' });
       }
   
       res.json(thought);
@@ -122,18 +122,15 @@ async updateThought(req, res) {
 
   async deleteReaction(req, res) {
     try {
-      //const thoughtId = req.params.thoughtId;
-      //const reactionId  = req.params.reactionId;
-
-      // Finds the thought by ID and update it to add the reaction:
+      // Find the thought by ID and update it to add the reaction:
       const thought = await Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
-        { $pull: { reaction: { reactionId: req.params.reactionId } } },
-        { new: true }
+        { $pull: { reactions: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true }
       );
   
       if (!thought) {
-        return res.status(404).json({ error: 'Error 404: Thought with this id not found' });
+        return res.status(404).json({ error: 'Error 404: No thought with this id' });
       }
 
       res.json(thought);
