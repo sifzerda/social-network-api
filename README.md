@@ -84,7 +84,7 @@ API routes:
 
 ## 5. Usage
 
-This is MERN-based code for the back end of a social networking app. It runs on an express server with a MongoDB database containing models for users, thoughts and associated reactions. API routes enable CRUD functionality for users, posts ('thoughts') and comments ('reactions'). It's designed for a site where users can sign up and post 'thoughts', leave 'reactions' to other users thoughts, and add other users as 'friends'.
+This is MERN-based code for the back end of a social networking app. It runs on an express server with a MongoDB database containing models for users, thoughts and associated reactions. API routes enable CRUD functionality for users, posts ('thoughts') and comments ('reactions'). It's designed for a site where users can sign up and post 'thoughts', leave 'reactions' to other users thoughts, and add other users as 'friends'. The seed file will provide the database with dummy data.
 
 ## 6. Support
 
