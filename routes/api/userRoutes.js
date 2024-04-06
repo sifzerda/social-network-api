@@ -21,14 +21,11 @@ router
 
   // /api/users/:id/friends/
 
-  router
-    .route('/:userId/friends')
-    .post(createFriend);
-
       // /api/users/:id/friends/:friendId
 
   router
   .route('/:userId/friends/:friendId')
+  .post(createFriend)
   .delete(deleteFriend);
 
 module.exports = router;
