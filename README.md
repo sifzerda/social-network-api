@@ -17,13 +17,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 
-![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white) ![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)  ![Nodemon](https://img.shields.io/badge/NODEMON-%23323330.svg?style=for-the-badge&logo=nodemon&logoColor=%BBDEAD) ![Insomnia](https://img.shields.io/badge/Insomnia-black?style=for-the-badge&logo=insomnia&logoColor=5849BE) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) 
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white) ![Markdown](https://img.shields.io/badge/markdown-%23000000.svg?style=for-the-badge&logo=markdown&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![NPM](https://img.shields.io/badge/npm-CB3837.svg?style=for-the-badge&logo=npm&logoColor=white) ![Nodemon](https://img.shields.io/badge/NODEMON-%23323330.svg?style=for-the-badge&logo=nodemon&logoColor=%BBDEAD) ![Insomnia](https://img.shields.io/badge/Insomnia-black?style=for-the-badge&logo=insomnia&logoColor=5849BE) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white) ![Mongoose](https://img.shields.io/badge/Mongoose-880000.svg?style=for-the-badge&logo=Mongoose&logoColor=white) ![Google Drive](https://img.shields.io/badge/Google%20Drive-4285F4.svg?style=for-the-badge&logo=Google-Drive&logoColor=white)
 
 ## 3. Visuals
 
 Link to video demo of app:
 
-.......
+[Social Network API demo video](https://drive.google.com/file/d/1PtcN2w0fvdzbDq1p1yqlKgHck8jhkgXD/view?usp=drive_link)
 
 ## 4. Installation
 
@@ -38,39 +38,49 @@ API routes:
 #### (1) Thoughts:
 
 <ins>localhost:3001/api/thoughts</ins>
-
+```md
 - GET all thoughts
 - POST a new thought
+```
 
 <ins>localhost:3001/api/thoughts/:thoughtId</ins>
-
+```md
 - GET thought by id
 - DELETE thought by id
 - PUT thought by id
+```
 
 <ins>localhost:3001/api/thoughts/:thoughtId/reactions</ins>
-
+```md
 - GET all reactions
+```
 
 <ins>localhost:3001/api/thoughts/:id/reactions/:reactionId</ins>
-
-- DELETE reaction by id
-- * this needs to be the reactionId not the _id
+```md
+- POST a new reaction
+ DELETE reaction by id
+```
 
 #### (2) Users:
 
 <ins>localhost:3001/api/users</ins>
-
+```md
 - GET all users
 - POST a new user
+```
 
 <ins>localhost:3001/api/users/:userId</ins>
-
+```md
 - GET one user by id
 - PUT user by id
 - DELETE user by id
+```
 
 <ins>localhost:3001/api/users/:userId/friends/:friendId</ins>
+```md
+- POST a new friend
+- DELETE a friend
+```
 
 ## 5. Usage
 
@@ -98,7 +108,7 @@ The author acknowledges and credits those who have contributed to this project, 
 -	https://git.bootcampcontent.com/Monash-University/MONU-VIRT-FSF-PT-11-2023-U-LOLC
 -	Chee Ho Tai
 -	Pranita Shrestha
-- 
+-   Katie Redford
 
 ## 10. License
 
