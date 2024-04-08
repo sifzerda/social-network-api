@@ -108,7 +108,7 @@ The author acknowledges and credits those who have contributed to this project, 
 -	https://git.bootcampcontent.com/Monash-University/MONU-VIRT-FSF-PT-11-2023-U-LOLC
 -	Chee Ho Tai
 -	Pranita Shrestha
--   Katie Redford
+- Katie Redford
 
 ## 10. License
 
