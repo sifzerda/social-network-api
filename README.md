@@ -58,7 +58,7 @@ API routes:
 <ins>localhost:3001/api/thoughts/:id/reactions/:reactionId</ins>
 ```md
 - POST a new reaction
- DELETE reaction by id
+- DELETE reaction by id
 ```
 
 #### (2) Users:
